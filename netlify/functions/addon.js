@@ -12,8 +12,19 @@ const apiClient = addonInterface.apiClient; // Get the shared apiClient instance
 const createImageProxyMiddleware = require('../../lib/middleware/proxy_image_middleware');
 const config = require('../../lib/config');
 const logger = require('../../lib/logger');
+const {
+  createNoIndexMiddleware,
+  createRobotsHandler,
+  createAccessSecretMiddleware,
+  createConfigurePasswordMiddleware
+} = require('../../lib/middleware/privacy_middleware');
 
 const app = express();
+
+app.use(createNoIndexMiddleware());
+app.use(createAccessSecretMiddleware());
+app.use(createConfigurePasswordMiddleware());
+app.get('/robots.txt', createRobotsHandler());
 
 app.use((req, res, next) => {
   logger.debug(`${req.method} ${req.path}`, {

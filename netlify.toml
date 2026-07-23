@@ -40,12 +40,19 @@
   port = 61327
   targetPort = 61327
 
+# Discourage search-engine indexing of the public addon surface
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
 # Headers for binary content (images)
 [[headers]]
   for = "/proxy/*"
   [headers.values]
     Content-Encoding = "identity"
     X-Content-Type-Options = "nosniff"
+    X-Robots-Tag = "noindex, nofollow, noarchive"
 
 # Environment variables (set these in Netlify dashboard)
 # LOG_LEVEL=info

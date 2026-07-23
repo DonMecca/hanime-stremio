@@ -15,6 +15,12 @@ const logger = require('./lib/logger');
 const addonInterface = require('./addon');
 const apiClient = addonInterface.apiClient; // Get the shared apiClient instance
 const createImageProxyMiddleware = require('./lib/middleware/proxy_image_middleware');
+const {
+  createNoIndexMiddleware,
+  createRobotsHandler,
+  createAccessSecretMiddleware,
+  createConfigurePasswordMiddleware
+} = require('./lib/middleware/privacy_middleware');
 const { 
   createGeneralRateLimiter, 
   createImageProxyRateLimiter,
@@ -105,6 +111,11 @@ function serveHTTP(addonInterface, opts = {}) {
   if (trustProxy) {
     logger.debug('Express trust proxy enabled (for accurate IP detection behind proxies)');
   }
+
+  app.use(createNoIndexMiddleware());
+  app.use(createAccessSecretMiddleware());
+  app.use(createConfigurePasswordMiddleware());
+  app.get('/robots.txt', createRobotsHandler());
 
   app.use(requestLogger);
 
