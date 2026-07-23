@@ -9,8 +9,8 @@
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["express"]
-  # Enable binary responses for images
-  included_files = ["public/images/**"]
+  # Enable binary responses for images + include WASM signer vendor asset
+  included_files = ["public/images/**", "lib/vendor/**"]
 
 # Route proxy images to function (must come before static images)
 [[redirects]]

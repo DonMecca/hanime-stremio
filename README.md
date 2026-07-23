@@ -4,37 +4,19 @@
 
 A Stremio addon for browsing and streaming content from Hanime.tv.
 
-# ⚠️ Important Announcement – Configuration Required
+## Current API layout (2026)
 
-Hanime has **removed all stream URLs from their public API**.  
-To access streams, the addon now requires **authentication with your Hanime account**.
+| Surface | Endpoint | Auth needed? |
+|---------|----------|--------------|
+| Catalogs / search | `guest.freeanimehentai.net/api/v11/search_hvs` | No — Hanime’s own site uses this guest full-index dump |
+| Free streams (≤720p) | WASM-signed `POST auth.hanime.tv/api/v11/handshake` | No account login |
+| Premium 1080p | Same handshake **plus** logged-in session | Yes — Turnstile + CSRF login |
 
----
+Credentials in the manifest are **optional** today (useful later for premium). They are **not** required for browsing or free playback.
 
-### ✅ Configuration Required
+### Hosting caveat
 
-This addon version includes a **required configuration page**.  
-You **must** enter your **Hanime email and password** to access streams.
-
-**Benefits:**
-- ✅ **Streams are now working** with authenticated access
-- ✅ **Premium users** automatically get **1080p quality**
-- ✅ Credentials are securely stored and only used for API authentication
-- ✅ Multiple users can use the same addon instance with different credentials
-
-**How to Configure:**
-1. Install the addon in Stremio
-2. When prompted, click "Configure" or go to the addon settings
-3. Enter your Hanime email and password
-4. Save the configuration
-5. Streams will now work!
-
----
-
-### 🔒 Security Note
-
-Your credentials are stored locally in Stremio and only sent to Hanime's API for authentication.  
-The addon does not store or log your password in plain text.
+`auth.hanime.tv` Cloudflare-challenges many cloud IPs (including Netlify Functions). Catalogs work on Netlify; **streams must run from a residential/self-hosted IP or a non-blocked host** (Render/Docker/local).
 
 ## Quick Start
 
@@ -111,7 +93,8 @@ See `docker-compose.yml` for all available options.
 ## Troubleshooting
 
 - **Thumbnails not loading**: Ensure `PUBLIC_URL` is set correctly
-- **No streams**: Check network connectivity and enable `LOG_LEVEL=debug`
+- **Catalogs empty on Netlify, streams empty**: Catalogs should work (guest search). Empty streams usually mean Cloudflare is challenging `auth.hanime.tv` from the host IP — run locally (`npm start`) or deploy to Render/Docker instead of Netlify Functions.
+- **No streams locally**: Enable `LOG_LEVEL=debug` and check handshake errors
 - **High memory**: Reduce `CACHE_MAX_SIZE`
 - **Slow catalogs**: Increase `CACHE_MAX_SIZE` or adjust cache TTLs
 

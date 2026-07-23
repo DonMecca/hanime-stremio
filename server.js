@@ -174,6 +174,10 @@ function serveHTTP(addonInterface, opts = {}) {
     });
   }
 
+  app.get('/health', (req, res) => {
+    res.status(200).json({ ok: true, version: require('./package.json').version });
+  });
+
   app.use(getRouter(addonInterface));
 
   // Try public/images first for Vercel, then images for local

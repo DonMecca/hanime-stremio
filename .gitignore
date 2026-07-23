@@ -57,6 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
+# Local Netlify CLI state
+.netlify/
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 

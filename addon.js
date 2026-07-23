@@ -24,20 +24,20 @@ const manifest = {
   behaviorHints: {
     adult: true,
     configurable: true,
-    configurationRequired: true
+    configurationRequired: false
   },
   config: [
     {
       key: 'email',
-      title: 'Email',
+      title: 'Email (optional — needed later for premium 1080p)',
       type: 'text',
-      required: true
+      required: false
     },
     {
       key: 'password',
-      title: 'Password',
+      title: 'Password (optional — needed later for premium 1080p)',
       type: 'password',
-      required: true
+      required: false
     }
   ],
   catalogs: [
