@@ -5,6 +5,11 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # Handshake egress: small sticky free-proxy pool (Cloudflare blocks Netlify IPs)
+  HANDSHAKE_USE_PROXY = "true"
+  HANDSHAKE_SKIP_CSRF = "true"
+  HANDSHAKE_DIRECT_FIRST = "false"
+  LOG_LEVEL = "info"
 
 [functions]
   node_bundler = "esbuild"
